@@ -3,7 +3,7 @@ Test Suite for identifying Poker hands.
 
 """
 from src.cards import Card, Rank, Suit
-from src.poker import (high_card, pair, two_pair, three_of_a_kind, straight, flush,
+from src.hands import (high_card, pair, two_pair, three_of_a_kind, straight, flush,
                        full_house, four_of_a_kind, straight_flush, royal_flush)
 import pytest
 
