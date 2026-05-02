@@ -1,5 +1,7 @@
-from src.cards import Card, Rank, Suit
+from src.cards import Card, Rank, Suit, deck
 import pytest
+
+_FULL_DECK = 52
 
 _ADDITION: dict[tuple[Card, ...], int] = {
     (
@@ -23,6 +25,14 @@ _ADDITION: dict[tuple[Card, ...], int] = {
         Card(Rank.ACE, Suit.CLUBS)
     ): 3,
 }
+
+
+def test_deck_length():
+    assert len(deck()) == _FULL_DECK
+
+
+def test_deck_shuffled_length():
+    assert len(deck(shuffled=True)) == _FULL_DECK
 
 
 @pytest.mark.parametrize("hand,expected", _ADDITION.items())

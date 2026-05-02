@@ -1,11 +1,15 @@
 """
 Provides enums for Rank and Suit, combined
 to form the Card class.
+
+The deck() function is available to create
+a collection of 52 cards, sorted or shuffled.
 """
 
 from dataclasses import dataclass
 from enum import Enum
 from functools import total_ordering
+from random import shuffle
 
 
 class Suit(Enum):
@@ -135,3 +139,24 @@ class Card:
 
     def __sub__(self, other):
         return self.rank.value - other.rank.value
+
+
+def deck(shuffled: bool = False) -> list[Card]:
+    """
+    Creates a deck of 52 cards.
+
+    13 distinct ranks per 4 suits.
+
+    Can optionally be shuffled.
+
+    :param shuffled: Randomize the order of the cards.
+    :return: A list with 52 cards, sorted or shuffled.
+    """
+
+    cards = [Card(rank, suit)
+             for rank in Rank for suit in Suit]
+
+    if shuffled:
+        shuffle(cards)
+
+    return cards
