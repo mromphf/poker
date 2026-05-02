@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from enum import Enum
 from functools import total_ordering
 
@@ -37,13 +38,23 @@ class Rank(Enum):
     def __lt__(self, other):
         return self.value < other.value
 
+    def __hash__(self):
+        return hash((self.name, self.value))
+
+    def __int__(self):
+        return self.value
+
     def __add__(self, other):
         return self.value + other.value
+
+    def __radd__(self, other):
+        return int(self) + int(other)
 
     def __sub__(self, other):
         return self.value - other.value
 
 
+@dataclass
 @total_ordering
 class Card:
     rank: Rank
@@ -67,6 +78,15 @@ class Card:
 
     def __gt__(self, other):
         return self.rank > other.rank
+
+    def __int__(self):
+        return self.rank.value
+
+    def __add__(self, other):
+        return self.rank.value + other.rank.value
+
+    def __radd__(self, other):
+        return int(self) + int(other)
 
     def __sub__(self, other):
         return self.rank.value - other.rank.value
