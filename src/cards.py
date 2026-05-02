@@ -109,8 +109,8 @@ class Card:
     rank: Rank
     suit: Suit
 
-    def __init__(self, r: Rank, s: Suit):
-        self.rank = r
+    def __init__(self, r: Rank | int, s: Suit):
+        self.rank = r if isinstance(r, Rank) else Rank(r)
         self.suit = s
 
     def __hash__(self):
@@ -160,3 +160,24 @@ def deck(shuffled: bool = False) -> list[Card]:
         shuffle(cards)
 
     return cards
+
+
+"""
+Convenience shorthand constants
+"""
+
+A: Rank = Rank.ACE
+
+J: Rank = Rank.JACK
+
+Q: Rank = Rank.QUEEN
+
+K: Rank = Rank.KING
+
+H: Suit = Suit.HEARTS
+
+C = Suit.CLUBS
+
+D = Suit.DIAMONDS
+
+S = Suit.SPADES
