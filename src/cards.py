@@ -176,8 +176,8 @@ K: Rank = Rank.KING
 
 H: Suit = Suit.HEARTS
 
-C = Suit.CLUBS
+C: Suit = Suit.CLUBS
 
-D = Suit.DIAMONDS
+D: Suit = Suit.DIAMONDS
 
-S = Suit.SPADES
+S: Suit = Suit.SPADES
