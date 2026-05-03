@@ -1,29 +1,35 @@
-from src.cards import Card, Rank, Suit, deck
+from src.cards import (Card, deck,
+                       A, J, Q, K, H, C, D, S)
 import pytest
 
 _FULL_DECK = 52
 
 _ADDITION: dict[tuple[Card, ...], int] = {
     (
-        Card(Rank.TWO, Suit.DIAMONDS),
-        Card(Rank.THREE, Suit.CLUBS)
+        Card(2, D),
+        Card(3, C)
     ): 5,
     # Jack = 11
     (
-        Card(Rank.SIX, Suit.CLUBS),
-        Card(Rank.JACK, Suit.CLUBS)
+        Card(6, C),
+        Card(J, C),
     ): 17,
     (
-        Card(Rank.SIX, Suit.DIAMONDS),
-        Card(Rank.JACK, Suit.SPADES),
-        Card(Rank.TWO, Suit.CLUBS)
+        Card(6, D),
+        Card(J, H),
+        Card(2, S),
     ): 19,
     # Aces are low
     (
-        Card(Rank.ACE, Suit.DIAMONDS),
-        Card(Rank.ACE, Suit.SPADES),
-        Card(Rank.ACE, Suit.CLUBS)
+        Card(A, D),
+        Card(A, C),
+        Card(A, H),
     ): 3,
+    # Queen (12) + King (13)
+    (
+        Card(Q, D),
+        Card(K, D),
+    ): 25
 }
 
 

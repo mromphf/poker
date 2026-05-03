@@ -2,7 +2,7 @@
 Test Suite for identifying Poker hands.
 
 """
-from src.cards import Card, Rank, Suit
+from src.cards import (Card, A, J, Q, K, H, C, D, S)
 from src.hands import (high_card, pair, two_pair, three_of_a_kind, straight, flush,
                        full_house, four_of_a_kind, straight_flush, royal_flush)
 import pytest
@@ -16,134 +16,134 @@ import pytest
 _HIGH_CARDS = [
     # One card is valid
     {
-        Card(Rank.ACE, Suit.HEARTS),
+        Card(A, H),
     },
     # Two cards are valid: "Pocket" cards
     {
-        Card(Rank.ACE, Suit.HEARTS),
-        Card(Rank.KING, Suit.DIAMONDS),
+        Card(A, H),
+        Card(K, D),
     },
     # Ace high, no flush, no straight
     {
-        Card(Rank.ACE, Suit.HEARTS),
-        Card(Rank.KING, Suit.DIAMONDS),
-        Card(Rank.QUEEN, Suit.CLUBS),
-        Card(Rank.JACK, Suit.SPADES),
-        Card(Rank.NINE, Suit.HEARTS),  # nine breaks the broadway straight
+        Card(A, H),
+        Card(K, D),
+        Card(Q, C),
+        Card(J, S),
+        Card(9, H),  # nine breaks the broadway straight
     },
     # King high
     {
-        Card(Rank.KING, Suit.HEARTS),
-        Card(Rank.QUEEN, Suit.DIAMONDS),
-        Card(Rank.JACK, Suit.CLUBS),
-        Card(Rank.NINE, Suit.SPADES),  # nine breaks the straight
-        Card(Rank.TWO, Suit.HEARTS),
+        Card(K, H),
+        Card(Q, D),
+        Card(J, C),
+        Card(9, S),  # nine breaks the straight
+        Card(2, H),
     },
     # All low ranks, no straight, no flush
     {
-        Card(Rank.TWO, Suit.HEARTS),
-        Card(Rank.FOUR, Suit.DIAMONDS),
-        Card(Rank.SIX, Suit.CLUBS),
-        Card(Rank.EIGHT, Suit.SPADES),
-        Card(Rank.JACK, Suit.HEARTS),
+        Card(2, H),
+        Card(4, D),
+        Card(6, C),
+        Card(8, S),
+        Card(J, H),
     },
     # Near-flush (four of one suit, one different)
     {
-        Card(Rank.ACE, Suit.HEARTS),
-        Card(Rank.KING, Suit.HEARTS),
-        Card(Rank.QUEEN, Suit.HEARTS),
-        Card(Rank.JACK, Suit.HEARTS),
-        Card(Rank.NINE, Suit.CLUBS),  # breaks flush and straight
+        Card(A, H),
+        Card(K, H),
+        Card(Q, H),
+        Card(J, H),
+        Card(9, C),  # breaks flush and straight
     },
     # Near-straight (one gap)
     {
-        Card(Rank.ACE, Suit.HEARTS),
-        Card(Rank.KING, Suit.DIAMONDS),
-        Card(Rank.QUEEN, Suit.CLUBS),
-        Card(Rank.JACK, Suit.SPADES),
-        Card(Rank.NINE, Suit.DIAMONDS),  # nine instead of ten breaks straight
+        Card(A, H),
+        Card(K, D),
+        Card(Q, C),
+        Card(J, S),
+        Card(9, D),  # nine instead of ten breaks straight
     },
     # All different suits, scattered ranks
     {
-        Card(Rank.THREE, Suit.HEARTS),
-        Card(Rank.SIX, Suit.DIAMONDS),
-        Card(Rank.EIGHT, Suit.CLUBS),
-        Card(Rank.JACK, Suit.SPADES),
-        Card(Rank.ACE, Suit.DIAMONDS),
+        Card(3, H),
+        Card(6, D),
+        Card(8, C),
+        Card(J, S),
+        Card(A, D),
     },
 ]
 
 _NON_HIGH_CARDS = [
     {
-        Card(Rank.ACE, Suit.HEARTS),
-        Card(Rank.ACE, Suit.DIAMONDS),
-        Card(Rank.KING, Suit.CLUBS),
-        Card(Rank.QUEEN, Suit.SPADES),
-        Card(Rank.JACK, Suit.HEARTS),
+        Card(A, H),
+        Card(A, D),
+        Card(K, C),
+        Card(Q, S),
+        Card(J, H),
     },
     # Two pair
     {
-        Card(Rank.ACE, Suit.HEARTS),
-        Card(Rank.ACE, Suit.DIAMONDS),
-        Card(Rank.KING, Suit.CLUBS),
-        Card(Rank.KING, Suit.SPADES),
-        Card(Rank.QUEEN, Suit.HEARTS),
+        Card(A, H),
+        Card(A, D),
+        Card(K, C),
+        Card(K, S),
+        Card(Q, H),
     },
     # Three of a kind
     {
-        Card(Rank.ACE, Suit.HEARTS),
-        Card(Rank.ACE, Suit.DIAMONDS),
-        Card(Rank.ACE, Suit.CLUBS),
-        Card(Rank.KING, Suit.SPADES),
-        Card(Rank.QUEEN, Suit.HEARTS),
+        Card(A, H),
+        Card(A, D),
+        Card(A, C),
+        Card(K, S),
+        Card(Q, H),
     },
     # Straight (off-suit)
     {
-        Card(Rank.TEN, Suit.HEARTS),
-        Card(Rank.NINE, Suit.DIAMONDS),
-        Card(Rank.EIGHT, Suit.CLUBS),
-        Card(Rank.SEVEN, Suit.SPADES),
-        Card(Rank.SIX, Suit.HEARTS),
+        Card(10, H),
+        Card(9, D),
+        Card(8, C),
+        Card(7, S),
+        Card(6, H),
     },
     # Flush (non-straight)
     {
-        Card(Rank.ACE, Suit.HEARTS),
-        Card(Rank.TEN, Suit.HEARTS),
-        Card(Rank.SEVEN, Suit.HEARTS),
-        Card(Rank.FOUR, Suit.HEARTS),
-        Card(Rank.TWO, Suit.HEARTS),
+        Card(A, H),
+        Card(10, H),
+        Card(7, H),
+        Card(4, H),
+        Card(2, H),
     },
     # Full house
     {
-        Card(Rank.ACE, Suit.HEARTS),
-        Card(Rank.ACE, Suit.DIAMONDS),
-        Card(Rank.ACE, Suit.CLUBS),
-        Card(Rank.KING, Suit.HEARTS),
-        Card(Rank.KING, Suit.DIAMONDS),
+        Card(A, H),
+        Card(A, D),
+        Card(A, C),
+        Card(K, H),
+        Card(K, D),
     },
     # Four of a kind
     {
-        Card(Rank.ACE, Suit.HEARTS),
-        Card(Rank.ACE, Suit.DIAMONDS),
-        Card(Rank.ACE, Suit.CLUBS),
-        Card(Rank.ACE, Suit.SPADES),
-        Card(Rank.KING, Suit.HEARTS),
+        Card(A, H),
+        Card(A, D),
+        Card(A, C),
+        Card(A, S),
+        Card(K, H),
     },
     # Straight flush
     {
-        Card(Rank.KING, Suit.HEARTS),
-        Card(Rank.QUEEN, Suit.HEARTS),
-        Card(Rank.JACK, Suit.HEARTS),
-        Card(Rank.TEN, Suit.HEARTS),
-        Card(Rank.NINE, Suit.HEARTS),
+        Card(K, H),
+        Card(Q, H),
+        Card(J, H),
+        Card(10, H),
+        Card(9, H),
     },
     # Royal flush
     {
-        Card(Rank.ACE, Suit.SPADES),
-        Card(Rank.KING, Suit.SPADES),
-        Card(Rank.QUEEN, Suit.SPADES),
-        Card(Rank.JACK, Suit.SPADES),
-        Card(Rank.TEN, Suit.SPADES),
+        Card(A, S),
+        Card(K, S),
+        Card(Q, S),
+        Card(J, S),
+        Card(10, S),
     },
 ]
 
@@ -155,99 +155,99 @@ _NON_HIGH_CARDS = [
 
 _PAIRS = [
     {
-        Card(Rank.TWO, Suit.HEARTS),
-        Card(Rank.TWO, Suit.SPADES),
-        Card(Rank.ACE, Suit.CLUBS),
-        Card(Rank.JACK, Suit.CLUBS),
-        Card(Rank.SEVEN, Suit.DIAMONDS),
+        Card(2, H),
+        Card(2, S),
+        Card(A, C),
+        Card(J, C),
+        Card(7, D),
     },
     {
         # Pair of Aces with distinct kickers
-        Card(Rank.ACE, Suit.HEARTS),
-        Card(Rank.ACE, Suit.DIAMONDS),
-        Card(Rank.KING, Suit.SPADES),
-        Card(Rank.QUEEN, Suit.CLUBS),
-        Card(Rank.TEN, Suit.HEARTS),
+        Card(A, H),
+        Card(A, D),
+        Card(K, S),
+        Card(Q, C),
+        Card(10, H),
     },
     {
         # Pair of Tens with a middle-range kicker
-        Card(Rank.TEN, Suit.SPADES),
-        Card(Rank.TEN, Suit.CLUBS),
-        Card(Rank.NINE, Suit.DIAMONDS),
-        Card(Rank.EIGHT, Suit.HEARTS),
-        Card(Rank.TWO, Suit.CLUBS),
+        Card(10, S),
+        Card(10, C),
+        Card(9, D),
+        Card(8, H),
+        Card(2, C),
     },
     {
         # Pair of Threes with numerical sequence kickers (non-straight)
-        Card(Rank.THREE, Suit.DIAMONDS),
-        Card(Rank.THREE, Suit.CLUBS),
-        Card(Rank.FOUR, Suit.HEARTS),
-        Card(Rank.FIVE, Suit.SPADES),
-        Card(Rank.SEVEN, Suit.DIAMONDS),
+        Card(3, D),
+        Card(3, C),
+        Card(4, H),
+        Card(5, S),
+        Card(7, D),
     },
     {
         # Pair of Kings with non-flush kickers
-        Card(Rank.KING, Suit.CLUBS),
-        Card(Rank.KING, Suit.DIAMONDS),
-        Card(Rank.SIX, Suit.SPADES),
-        Card(Rank.FOUR, Suit.CLUBS),
-        Card(Rank.THREE, Suit.HEARTS),
+        Card(K, C),
+        Card(K, D),
+        Card(6, S),
+        Card(4, C),
+        Card(3, H),
     },
     # A pair can be made with two cards
     {
-        Card(Rank.ACE, Suit.HEARTS),
-        Card(Rank.ACE, Suit.DIAMONDS),
+        Card(A, H),
+        Card(A, D),
     },
 ]
 
 _PAIRS_NON = [
     {
         # High Card (No pairs, disparate ranks)
-        Card(Rank.ACE, Suit.HEARTS),
-        Card(Rank.KING, Suit.SPADES),
-        Card(Rank.TEN, Suit.CLUBS),
-        Card(Rank.EIGHT, Suit.DIAMONDS),
-        Card(Rank.FOUR, Suit.SPADES),
+        Card(A, H),
+        Card(K, S),
+        Card(10, C),
+        Card(8, D),
+        Card(4, S),
     },
     {
         # All distinct ranks, non-sequential
-        Card(Rank.QUEEN, Suit.DIAMONDS),
-        Card(Rank.JACK, Suit.CLUBS),
-        Card(Rank.NINE, Suit.HEARTS),
-        Card(Rank.SEVEN, Suit.SPADES),
-        Card(Rank.FIVE, Suit.CLUBS),
+        Card(Q, D),
+        Card(J, C),
+        Card(9, H),
+        Card(7, S),
+        Card(5, C),
     },
     {
         # A Straight (Five sequential ranks, distinct)
-        Card(Rank.NINE, Suit.HEARTS),
-        Card(Rank.EIGHT, Suit.SPADES),
-        Card(Rank.SEVEN, Suit.DIAMONDS),
-        Card(Rank.SIX, Suit.CLUBS),
-        Card(Rank.FIVE, Suit.HEARTS),
+        Card(9, H),
+        Card(8, S),
+        Card(7, D),
+        Card(6, C),
+        Card(5, H),
     },
     {
         # Low ranks, all distinct
-        Card(Rank.SEVEN, Suit.CLUBS),
-        Card(Rank.SIX, Suit.DIAMONDS),
-        Card(Rank.FOUR, Suit.SPADES),
-        Card(Rank.THREE, Suit.HEARTS),
-        Card(Rank.TWO, Suit.CLUBS),
+        Card(7, C),
+        Card(6, D),
+        Card(4, S),
+        Card(3, H),
+        Card(2, C),
     },
     {
         # Broad range of ranks
-        Card(Rank.KING, Suit.HEARTS),
-        Card(Rank.JACK, Suit.DIAMONDS),
-        Card(Rank.EIGHT, Suit.SPADES),
-        Card(Rank.FIVE, Suit.CLUBS),
-        Card(Rank.THREE, Suit.SPADES),
+        Card(K, H),
+        Card(J, D),
+        Card(8, S),
+        Card(5, C),
+        Card(3, S),
     },
     {
         # Two pair
-        Card(Rank.KING, Suit.HEARTS),
-        Card(Rank.KING, Suit.DIAMONDS),
-        Card(Rank.FIVE, Suit.SPADES),
-        Card(Rank.FIVE, Suit.CLUBS),
-        Card(Rank.THREE, Suit.SPADES),
+        Card(K, H),
+        Card(K, D),
+        Card(5, S),
+        Card(5, C),
+        Card(3, S),
     }
 ]
 
@@ -260,86 +260,86 @@ _PAIRS_NON = [
 _TWO_PAIRS = [
     {
         # High pairs: Aces and Kings
-        Card(Rank.ACE, Suit.HEARTS),
-        Card(Rank.ACE, Suit.SPADES),
-        Card(Rank.KING, Suit.CLUBS),
-        Card(Rank.KING, Suit.DIAMONDS),
-        Card(Rank.QUEEN, Suit.HEARTS),
+        Card(A, H),
+        Card(A, S),
+        Card(K, C),
+        Card(K, D),
+        Card(Q, H),
     },
     {
         # Middle pairs: Jacks and Tens
-        Card(Rank.JACK, Suit.DIAMONDS),
-        Card(Rank.JACK, Suit.CLUBS),
-        Card(Rank.TEN, Suit.SPADES),
-        Card(Rank.TEN, Suit.HEARTS),
-        Card(Rank.TWO, Suit.CLUBS),
+        Card(J, D),
+        Card(J, C),
+        Card(10, S),
+        Card(10, H),
+        Card(2, C),
     },
     {
         # Low pairs: Fours and Threes
-        Card(Rank.FOUR, Suit.SPADES),
-        Card(Rank.FOUR, Suit.HEARTS),
-        Card(Rank.THREE, Suit.DIAMONDS),
-        Card(Rank.THREE, Suit.CLUBS),
-        Card(Rank.EIGHT, Suit.SPADES),
+        Card(4, S),
+        Card(4, H),
+        Card(3, D),
+        Card(3, C),
+        Card(8, S),
     },
     {
         # Disjointed pairs: Queens and Sevens
-        Card(Rank.QUEEN, Suit.CLUBS),
-        Card(Rank.QUEEN, Suit.SPADES),
-        Card(Rank.SEVEN, Suit.HEARTS),
-        Card(Rank.SEVEN, Suit.DIAMONDS),
-        Card(Rank.NINE, Suit.CLUBS),
+        Card(Q, C),
+        Card(Q, S),
+        Card(7, H),
+        Card(7, D),
+        Card(9, C),
     },
     {
         # High/Low split: Aces and Twos
-        Card(Rank.ACE, Suit.DIAMONDS),
-        Card(Rank.ACE, Suit.CLUBS),
-        Card(Rank.TWO, Suit.HEARTS),
-        Card(Rank.TWO, Suit.SPADES),
-        Card(Rank.SIX, Suit.DIAMONDS),
+        Card(A, D),
+        Card(A, C),
+        Card(2, H),
+        Card(2, S),
+        Card(6, D),
     },
 ]
 
 _TWO_PAIRS_NON = [
     {
         # Three of a Kind (Not two pair)
-        Card(Rank.QUEEN, Suit.HEARTS),
-        Card(Rank.QUEEN, Suit.SPADES),
-        Card(Rank.QUEEN, Suit.DIAMONDS),
-        Card(Rank.EIGHT, Suit.CLUBS),
-        Card(Rank.FIVE, Suit.HEARTS),
+        Card(Q, H),
+        Card(Q, S),
+        Card(Q, D),
+        Card(8, C),
+        Card(5, H),
     },
     {
         # One Pair
-        Card(Rank.TEN, Suit.CLUBS),
-        Card(Rank.TEN, Suit.DIAMONDS),
-        Card(Rank.ACE, Suit.SPADES),
-        Card(Rank.JACK, Suit.HEARTS),
-        Card(Rank.SEVEN, Suit.CLUBS),
+        Card(10, C),
+        Card(10, D),
+        Card(A, S),
+        Card(J, H),
+        Card(7, C),
     },
     {
         # High Card (Distinct ranks)
-        Card(Rank.KING, Suit.SPADES),
-        Card(Rank.JACK, Suit.DIAMONDS),
-        Card(Rank.NINE, Suit.HEARTS),
-        Card(Rank.SIX, Suit.CLUBS),
-        Card(Rank.FOUR, Suit.SPADES),
+        Card(K, S),
+        Card(J, D),
+        Card(9, H),
+        Card(6, C),
+        Card(4, S),
     },
     {
         # Straight (Five sequential ranks)
-        Card(Rank.EIGHT, Suit.HEARTS),
-        Card(Rank.SEVEN, Suit.DIAMONDS),
-        Card(Rank.SIX, Suit.SPADES),
-        Card(Rank.FIVE, Suit.CLUBS),
-        Card(Rank.FOUR, Suit.DIAMONDS),
+        Card(8, H),
+        Card(7, D),
+        Card(6, S),
+        Card(5, C),
+        Card(4, D),
     },
     {
         # Full House (One pair, one set)
-        Card(Rank.ACE, Suit.CLUBS),
-        Card(Rank.ACE, Suit.CLUBS),
-        Card(Rank.EIGHT, Suit.CLUBS),
-        Card(Rank.EIGHT, Suit.CLUBS),
-        Card(Rank.EIGHT, Suit.CLUBS),
+        Card(A, C),
+        Card(A, C),
+        Card(8, C),
+        Card(8, C),
+        Card(8, C),
     }
 ]
 
@@ -352,54 +352,54 @@ _TWO_PAIRS_NON = [
 _SETS = [
     {
         # Three of a Kind: Kings
-        Card(Rank.KING, Suit.HEARTS),
-        Card(Rank.KING, Suit.SPADES),
-        Card(Rank.KING, Suit.DIAMONDS),
-        Card(Rank.NINE, Suit.CLUBS),
-        Card(Rank.FOUR, Suit.HEARTS),
+        Card(K, H),
+        Card(K, S),
+        Card(K, D),
+        Card(9, C),
+        Card(4, H),
     },
     {
         # Three of a Kind: Threes
-        Card(Rank.THREE, Suit.DIAMONDS),
-        Card(Rank.THREE, Suit.CLUBS),
-        Card(Rank.ACE, Suit.HEARTS),
-        Card(Rank.THREE, Suit.SPADES),
-        Card(Rank.JACK, Suit.DIAMONDS),
+        Card(3, D),
+        Card(3, C),
+        Card(A, H),
+        Card(3, S),
+        Card(J, D),
     },
     {
         # Three of a Kind: Tens
-        Card(Rank.TEN, Suit.CLUBS),
-        Card(Rank.TWO, Suit.CLUBS),
-        Card(Rank.TEN, Suit.HEARTS),
-        Card(Rank.SEVEN, Suit.DIAMONDS),
-        Card(Rank.TEN, Suit.SPADES),
+        Card(10, C),
+        Card(2, C),
+        Card(10, H),
+        Card(7, D),
+        Card(10, S),
     }
 ]
 
 _SETS_NON = [
     {
         # Two Pair (Not three of a kind)
-        Card(Rank.ACE, Suit.HEARTS),
-        Card(Rank.ACE, Suit.SPADES),
-        Card(Rank.QUEEN, Suit.CLUBS),
-        Card(Rank.QUEEN, Suit.DIAMONDS),
-        Card(Rank.EIGHT, Suit.HEARTS),
+        Card(A, H),
+        Card(A, S),
+        Card(Q, C),
+        Card(Q, D),
+        Card(8, H),
     },
     {
         # One Pair
-        Card(Rank.JACK, Suit.SPADES),
-        Card(Rank.JACK, Suit.HEARTS),
-        Card(Rank.NINE, Suit.CLUBS),
-        Card(Rank.FIVE, Suit.DIAMONDS),
-        Card(Rank.TWO, Suit.SPADES),
+        Card(J, S),
+        Card(J, H),
+        Card(9, C),
+        Card(5, D),
+        Card(2, S),
     },
     {
         # High Card / All distinct ranks
-        Card(Rank.KING, Suit.DIAMONDS),
-        Card(Rank.TEN, Suit.HEARTS),
-        Card(Rank.EIGHT, Suit.CLUBS),
-        Card(Rank.SIX, Suit.SPADES),
-        Card(Rank.THREE, Suit.DIAMONDS),
+        Card(K, D),
+        Card(10, H),
+        Card(8, C),
+        Card(6, S),
+        Card(3, D),
     }
 ]
 
@@ -412,86 +412,86 @@ _SETS_NON = [
 _STRAIGHTS = [
     {
         # High Straight (Broadway)
-        Card(Rank.ACE, Suit.HEARTS),
-        Card(Rank.KING, Suit.SPADES),
-        Card(Rank.QUEEN, Suit.CLUBS),
-        Card(Rank.JACK, Suit.DIAMONDS),
-        Card(Rank.TEN, Suit.HEARTS),
+        Card(A, H),
+        Card(K, S),
+        Card(Q, C),
+        Card(J, D),
+        Card(10, H),
     },
     {
         # Low Straight (Wheel)
-        Card(Rank.FIVE, Suit.SPADES),
-        Card(Rank.FOUR, Suit.CLUBS),
-        Card(Rank.THREE, Suit.DIAMONDS),
-        Card(Rank.TWO, Suit.HEARTS),
-        Card(Rank.ACE, Suit.CLUBS),
+        Card(5, S),
+        Card(4, C),
+        Card(3, D),
+        Card(2, H),
+        Card(A, C),
     },
     {
         # Mid-range Straight
-        Card(Rank.NINE, Suit.DIAMONDS),
-        Card(Rank.EIGHT, Suit.CLUBS),
-        Card(Rank.SEVEN, Suit.SPADES),
-        Card(Rank.SIX, Suit.HEARTS),
-        Card(Rank.FIVE, Suit.DIAMONDS),
+        Card(9, D),
+        Card(8, C),
+        Card(7, S),
+        Card(6, H),
+        Card(5, D),
     },
     {
         # Mid-range Straight (different suits)
-        Card(Rank.JACK, Suit.CLUBS),
-        Card(Rank.TEN, Suit.DIAMONDS),
-        Card(Rank.NINE, Suit.SPADES),
-        Card(Rank.EIGHT, Suit.HEARTS),
-        Card(Rank.SEVEN, Suit.CLUBS),
+        Card(J, C),
+        Card(10, D),
+        Card(9, S),
+        Card(8, H),
+        Card(7, C),
     },
     {
         # Lower Mid-range Straight
-        Card(Rank.SIX, Suit.SPADES),
-        Card(Rank.FIVE, Suit.HEARTS),
-        Card(Rank.FOUR, Suit.DIAMONDS),
-        Card(Rank.THREE, Suit.CLUBS),
-        Card(Rank.TWO, Suit.SPADES),
+        Card(6, S),
+        Card(5, H),
+        Card(4, D),
+        Card(3, C),
+        Card(2, S),
     }
 ]
 
 _NON_STRAIGHTS = [
     {
         # Broken Straight (Gap at the Seven)
-        Card(Rank.NINE, Suit.HEARTS),
-        Card(Rank.EIGHT, Suit.SPADES),
-        Card(Rank.SIX, Suit.CLUBS),
-        Card(Rank.FIVE, Suit.DIAMONDS),
-        Card(Rank.FOUR, Suit.HEARTS),
+        Card(9, H),
+        Card(8, S),
+        Card(6, C),
+        Card(5, D),
+        Card(4, H),
     },
     {
         # Wrap-around (King-Ace-Two is not a straight)
-        Card(Rank.KING, Suit.DIAMONDS),
-        Card(Rank.ACE, Suit.CLUBS),
-        Card(Rank.TWO, Suit.SPADES),
-        Card(Rank.THREE, Suit.HEARTS),
-        Card(Rank.FOUR, Suit.DIAMONDS),
+        Card(K, D),
+        Card(A, C),
+        Card(2, S),
+        Card(3, H),
+        Card(4, D),
     },
     {
         # High Card / All distinct but far apart
-        Card(Rank.ACE, Suit.SPADES),
-        Card(Rank.JACK, Suit.DIAMONDS),
-        Card(Rank.EIGHT, Suit.HEARTS),
-        Card(Rank.FIVE, Suit.CLUBS),
-        Card(Rank.TWO, Suit.SPADES),
+        Card(A, S),
+        Card(J, D),
+        Card(8, H),
+        Card(5, C),
+        Card(2, S),
     },
     {
         # Pair (Contains duplicate ranks, cannot be a straight)
-        Card(Rank.TEN, Suit.CLUBS),
-        Card(Rank.TEN, Suit.DIAMONDS),
-        Card(Rank.NINE, Suit.SPADES),
-        Card(Rank.EIGHT, Suit.HEARTS),
-        Card(Rank.SEVEN, Suit.CLUBS),
+        Card(10, C),
+        Card(10, D),
+        Card(9, S),
+        Card(8, H),
+        Card(7, C),
     },
     {
         # Near Broadway (Missing the Jack)
-        Card(Rank.ACE, Suit.HEARTS),
-        Card(Rank.KING, Suit.SPADES),
-        Card(Rank.QUEEN, Suit.CLUBS),
-        Card(Rank.TEN, Suit.DIAMONDS),
-        Card(Rank.NINE, Suit.HEARTS),
+        Card(A, H),
+        Card(K, S),
+        Card(Q, C),
+        Card(10, D),
+        Card(9, H),
     }
 ]
 
@@ -503,62 +503,62 @@ _NON_STRAIGHTS = [
 
 _FLUSHES = [
     {
-        Card(Rank.ACE, Suit.HEARTS),
-        Card(Rank.KING, Suit.HEARTS),
-        Card(Rank.SEVEN, Suit.HEARTS),
-        Card(Rank.JACK, Suit.HEARTS),
-        Card(Rank.TWO, Suit.HEARTS),
+        Card(A, H),
+        Card(K, H),
+        Card(7, H),
+        Card(J, H),
+        Card(2, H),
     },
     {
-        Card(Rank.FIVE, Suit.DIAMONDS),
-        Card(Rank.NINE, Suit.DIAMONDS),
-        Card(Rank.THREE, Suit.DIAMONDS),
-        Card(Rank.TWO, Suit.DIAMONDS),
-        Card(Rank.ACE, Suit.DIAMONDS),
+        Card(5, D),
+        Card(9, D),
+        Card(3, D),
+        Card(2, D),
+        Card(A, D),
     },
     {
-        Card(Rank.FIVE, Suit.SPADES),
-        Card(Rank.SIX, Suit.SPADES),
-        Card(Rank.THREE, Suit.SPADES),
-        Card(Rank.EIGHT, Suit.SPADES),
-        Card(Rank.ACE, Suit.SPADES),
+        Card(5, S),
+        Card(6, S),
+        Card(3, S),
+        Card(8, S),
+        Card(A, S),
     },
     {
-        Card(Rank.JACK, Suit.CLUBS),
-        Card(Rank.TWO, Suit.CLUBS),
-        Card(Rank.SIX, Suit.CLUBS),
-        Card(Rank.THREE, Suit.CLUBS),
-        Card(Rank.ACE, Suit.CLUBS),
+        Card(J, C),
+        Card(2, C),
+        Card(6, C),
+        Card(3, C),
+        Card(A, C),
     },
 ]
 
 _NON_FLUSHES = [
     {
-        Card(Rank.ACE, Suit.HEARTS),
-        Card(Rank.KING, Suit.HEARTS),
-        Card(Rank.SEVEN, Suit.HEARTS),
-        Card(Rank.JACK, Suit.HEARTS),
-        Card(Rank.TWO, Suit.CLUBS),
+        Card(A, H),
+        Card(K, H),
+        Card(7, H),
+        Card(J, H),
+        Card(2, C),
     },
     {
-        Card(Rank.FIVE, Suit.DIAMONDS),
-        Card(Rank.TWO, Suit.DIAMONDS),
-        Card(Rank.THREE, Suit.DIAMONDS),
-        Card(Rank.TWO, Suit.DIAMONDS),
+        Card(5, D),
+        Card(2, D),
+        Card(3, D),
+        Card(2, D),
     },
     {
-        Card(Rank.FIVE, Suit.SPADES),
-        Card(Rank.SIX, Suit.CLUBS),
-        Card(Rank.THREE, Suit.SPADES),
-        Card(Rank.EIGHT, Suit.HEARTS),
-        Card(Rank.ACE, Suit.SPADES),
+        Card(5, S),
+        Card(6, C),
+        Card(3, S),
+        Card(8, H),
+        Card(A, S),
     },
     {
-        Card(Rank.JACK, Suit.CLUBS),
-        Card(Rank.TWO, Suit.CLUBS),
-        Card(Rank.SIX, Suit.SPADES),
-        Card(Rank.THREE, Suit.SPADES),
-        Card(Rank.ACE, Suit.HEARTS),
+        Card(J, C),
+        Card(2, C),
+        Card(6, S),
+        Card(3, S),
+        Card(A, H),
     },
 ]
 
@@ -571,110 +571,110 @@ _NON_FLUSHES = [
 _FULL_HOUSES = [
     # Aces full of threes
     {
-        Card(Rank.ACE, Suit.HEARTS),
-        Card(Rank.ACE, Suit.DIAMONDS),
-        Card(Rank.THREE, Suit.HEARTS),
-        Card(Rank.THREE, Suit.CLUBS),
-        Card(Rank.THREE, Suit.SPADES),
+        Card(A, H),
+        Card(A, D),
+        Card(3, H),
+        Card(3, C),
+        Card(3, S),
     },
     # Threes full of aces
     {
-        Card(Rank.THREE, Suit.HEARTS),
-        Card(Rank.THREE, Suit.DIAMONDS),
-        Card(Rank.THREE, Suit.CLUBS),
-        Card(Rank.ACE, Suit.HEARTS),
-        Card(Rank.ACE, Suit.SPADES),
+        Card(3, H),
+        Card(3, D),
+        Card(3, C),
+        Card(A, H),
+        Card(A, S),
     },
     # Kings full of twos
     {
-        Card(Rank.KING, Suit.HEARTS),
-        Card(Rank.KING, Suit.DIAMONDS),
-        Card(Rank.KING, Suit.CLUBS),
-        Card(Rank.TWO, Suit.HEARTS),
-        Card(Rank.TWO, Suit.SPADES),
+        Card(K, H),
+        Card(K, D),
+        Card(K, C),
+        Card(2, H),
+        Card(2, S),
     },
     # Twos full of kings (low trips, high pair)
     {
-        Card(Rank.TWO, Suit.HEARTS),
-        Card(Rank.TWO, Suit.DIAMONDS),
-        Card(Rank.TWO, Suit.CLUBS),
-        Card(Rank.KING, Suit.HEARTS),
-        Card(Rank.KING, Suit.SPADES),
+        Card(2, H),
+        Card(2, D),
+        Card(2, C),
+        Card(K, H),
+        Card(K, S),
     },
     # Mid-rank full house
     {
-        Card(Rank.SEVEN, Suit.HEARTS),
-        Card(Rank.SEVEN, Suit.DIAMONDS),
-        Card(Rank.SEVEN, Suit.CLUBS),
-        Card(Rank.JACK, Suit.HEARTS),
-        Card(Rank.JACK, Suit.SPADES),
+        Card(7, H),
+        Card(7, D),
+        Card(7, C),
+        Card(J, H),
+        Card(J, S),
     },
     # Adjacent ranks
     {
-        Card(Rank.TEN, Suit.HEARTS),
-        Card(Rank.TEN, Suit.DIAMONDS),
-        Card(Rank.TEN, Suit.CLUBS),
-        Card(Rank.NINE, Suit.HEARTS),
-        Card(Rank.NINE, Suit.SPADES),
+        Card(10, H),
+        Card(10, D),
+        Card(10, C),
+        Card(9, H),
+        Card(9, S),
     },
 ]
 
 _NON_FULL_HOUSES = [
     # Two pair (most common confusion case)
     {
-        Card(Rank.ACE, Suit.HEARTS),
-        Card(Rank.ACE, Suit.DIAMONDS),
-        Card(Rank.THREE, Suit.HEARTS),
-        Card(Rank.THREE, Suit.CLUBS),
-        Card(Rank.FIVE, Suit.SPADES),
+        Card(A, H),
+        Card(A, D),
+        Card(3, H),
+        Card(3, C),
+        Card(5, S),
     },
     # Three of a kind, no pair
     {
-        Card(Rank.ACE, Suit.HEARTS),
-        Card(Rank.ACE, Suit.DIAMONDS),
-        Card(Rank.ACE, Suit.CLUBS),
-        Card(Rank.THREE, Suit.HEARTS),
-        Card(Rank.FIVE, Suit.SPADES),
+        Card(A, H),
+        Card(A, D),
+        Card(A, C),
+        Card(3, H),
+        Card(5, S),
     },
     # Four of a kind (trips + pair pattern broken)
     {
-        Card(Rank.ACE, Suit.HEARTS),
-        Card(Rank.ACE, Suit.DIAMONDS),
-        Card(Rank.ACE, Suit.CLUBS),
-        Card(Rank.ACE, Suit.SPADES),
-        Card(Rank.THREE, Suit.HEARTS),
+        Card(A, H),
+        Card(A, D),
+        Card(A, C),
+        Card(A, S),
+        Card(3, H),
     },
     # One pair only
     {
-        Card(Rank.ACE, Suit.HEARTS),
-        Card(Rank.ACE, Suit.DIAMONDS),
-        Card(Rank.THREE, Suit.HEARTS),
-        Card(Rank.FIVE, Suit.CLUBS),
-        Card(Rank.SEVEN, Suit.SPADES),
+        Card(A, H),
+        Card(A, D),
+        Card(3, H),
+        Card(5, C),
+        Card(7, S),
     },
     # High card — all distinct ranks
     {
-        Card(Rank.ACE, Suit.HEARTS),
-        Card(Rank.KING, Suit.DIAMONDS),
-        Card(Rank.QUEEN, Suit.CLUBS),
-        Card(Rank.JACK, Suit.SPADES),
-        Card(Rank.NINE, Suit.HEARTS),
+        Card(A, H),
+        Card(K, D),
+        Card(Q, C),
+        Card(J, S),
+        Card(9, H),
     },
     # Flush — same suit, no rank grouping (5 distinct ranks)
     {
-        Card(Rank.ACE, Suit.HEARTS),
-        Card(Rank.KING, Suit.HEARTS),
-        Card(Rank.QUEEN, Suit.HEARTS),
-        Card(Rank.JACK, Suit.HEARTS),
-        Card(Rank.NINE, Suit.HEARTS),
+        Card(A, H),
+        Card(K, H),
+        Card(Q, H),
+        Card(J, H),
+        Card(9, H),
     },
     # Invalid hand - duplicated suit is filtered out
     {
-        Card(Rank.TEN, Suit.HEARTS),
-        Card(Rank.TEN, Suit.DIAMONDS),
-        Card(Rank.TEN, Suit.DIAMONDS),  # <-- duplicate
-        Card(Rank.NINE, Suit.HEARTS),
-        Card(Rank.NINE, Suit.SPADES),
+        Card(10, H),
+        Card(10, D),
+        Card(10, D),  # <-- duplicate
+        Card(9, H),
+        Card(9, S),
     },
 ]
 
@@ -687,94 +687,94 @@ _NON_FULL_HOUSES = [
 _FOURS = [
     # Aces with low kicker
     {
-        Card(Rank.ACE, Suit.HEARTS),
-        Card(Rank.ACE, Suit.DIAMONDS),
-        Card(Rank.ACE, Suit.SPADES),
-        Card(Rank.ACE, Suit.CLUBS),
-        Card(Rank.TWO, Suit.SPADES),
+        Card(A, H),
+        Card(A, D),
+        Card(A, S),
+        Card(A, C),
+        Card(2, S),
     },
     # Aces with high kicker
     {
-        Card(Rank.ACE, Suit.HEARTS),
-        Card(Rank.ACE, Suit.DIAMONDS),
-        Card(Rank.ACE, Suit.SPADES),
-        Card(Rank.ACE, Suit.CLUBS),
-        Card(Rank.KING, Suit.HEARTS),
+        Card(A, H),
+        Card(A, D),
+        Card(A, S),
+        Card(A, C),
+        Card(K, H),
     },
     # Low quads (twos)
     {
-        Card(Rank.TWO, Suit.HEARTS),
-        Card(Rank.TWO, Suit.DIAMONDS),
-        Card(Rank.TWO, Suit.SPADES),
-        Card(Rank.TWO, Suit.CLUBS),
-        Card(Rank.ACE, Suit.HEARTS),
+        Card(2, H),
+        Card(2, D),
+        Card(2, S),
+        Card(2, C),
+        Card(A, H),
     },
     # Mid-rank quads
     {
-        Card(Rank.SEVEN, Suit.HEARTS),
-        Card(Rank.SEVEN, Suit.DIAMONDS),
-        Card(Rank.SEVEN, Suit.SPADES),
-        Card(Rank.SEVEN, Suit.CLUBS),
-        Card(Rank.KING, Suit.HEARTS),
+        Card(7, H),
+        Card(7, D),
+        Card(7, S),
+        Card(7, C),
+        Card(K, H),
     },
     # Kings
     {
-        Card(Rank.KING, Suit.HEARTS),
-        Card(Rank.KING, Suit.DIAMONDS),
-        Card(Rank.KING, Suit.SPADES),
-        Card(Rank.KING, Suit.CLUBS),
-        Card(Rank.ACE, Suit.HEARTS),
+        Card(K, H),
+        Card(K, D),
+        Card(K, S),
+        Card(K, C),
+        Card(A, H),
     },
 ]
 
 _NON_FOURS = [
     # Three of a kind (the closest neighbour — one short)
     {
-        Card(Rank.ACE, Suit.HEARTS),
-        Card(Rank.ACE, Suit.DIAMONDS),
-        Card(Rank.ACE, Suit.SPADES),
-        Card(Rank.THREE, Suit.CLUBS),
-        Card(Rank.FIVE, Suit.HEARTS),
+        Card(A, H),
+        Card(A, D),
+        Card(A, S),
+        Card(3, C),
+        Card(5, H),
     },
     # Full house (trips + pair — two distinct rank groups, like quads)
     {
-        Card(Rank.ACE, Suit.HEARTS),
-        Card(Rank.ACE, Suit.DIAMONDS),
-        Card(Rank.ACE, Suit.SPADES),
-        Card(Rank.KING, Suit.CLUBS),
-        Card(Rank.KING, Suit.HEARTS),
+        Card(A, H),
+        Card(A, D),
+        Card(A, S),
+        Card(K, C),
+        Card(K, H),
     },
     # Two pair
     {
-        Card(Rank.ACE, Suit.HEARTS),
-        Card(Rank.ACE, Suit.DIAMONDS),
-        Card(Rank.THREE, Suit.HEARTS),
-        Card(Rank.THREE, Suit.CLUBS),
-        Card(Rank.FIVE, Suit.SPADES),
+        Card(A, H),
+        Card(A, D),
+        Card(3, H),
+        Card(3, C),
+        Card(5, S),
     },
     # One pair
     {
-        Card(Rank.ACE, Suit.HEARTS),
-        Card(Rank.ACE, Suit.DIAMONDS),
-        Card(Rank.THREE, Suit.HEARTS),
-        Card(Rank.FIVE, Suit.CLUBS),
-        Card(Rank.SEVEN, Suit.SPADES),
+        Card(A, H),
+        Card(A, D),
+        Card(3, H),
+        Card(5, C),
+        Card(7, S),
     },
     # High card
     {
-        Card(Rank.ACE, Suit.HEARTS),
-        Card(Rank.KING, Suit.DIAMONDS),
-        Card(Rank.QUEEN, Suit.CLUBS),
-        Card(Rank.JACK, Suit.SPADES),
-        Card(Rank.NINE, Suit.HEARTS),
+        Card(A, H),
+        Card(K, D),
+        Card(Q, C),
+        Card(J, S),
+        Card(9, H),
     },
     # Three of a kind from prior negative case
     {
-        Card(Rank.ACE, Suit.HEARTS),
-        Card(Rank.EIGHT, Suit.DIAMONDS),
-        Card(Rank.THREE, Suit.HEARTS),
-        Card(Rank.THREE, Suit.CLUBS),
-        Card(Rank.THREE, Suit.SPADES),
+        Card(A, H),
+        Card(8, D),
+        Card(3, H),
+        Card(3, C),
+        Card(3, S),
     },
 ]
 
@@ -787,94 +787,94 @@ _NON_FOURS = [
 _STRAIGHT_FLUSHES = [
     {
         # High Straight (Broadway)
-        Card(Rank.ACE, Suit.HEARTS),
-        Card(Rank.KING, Suit.HEARTS),
-        Card(Rank.QUEEN, Suit.HEARTS),
-        Card(Rank.JACK, Suit.HEARTS),
-        Card(Rank.TEN, Suit.HEARTS),
+        Card(A, H),
+        Card(K, H),
+        Card(Q, H),
+        Card(J, H),
+        Card(10, H),
     },
     {
         # Low Straight (Wheel)
-        Card(Rank.FIVE, Suit.SPADES),
-        Card(Rank.FOUR, Suit.SPADES),
-        Card(Rank.THREE, Suit.SPADES),
-        Card(Rank.TWO, Suit.SPADES),
-        Card(Rank.ACE, Suit.SPADES),
+        Card(5, S),
+        Card(4, S),
+        Card(3, S),
+        Card(2, S),
+        Card(A, S),
     },
     {
         # Mid-range Straight
-        Card(Rank.NINE, Suit.CLUBS),
-        Card(Rank.EIGHT, Suit.CLUBS),
-        Card(Rank.SEVEN, Suit.CLUBS),
-        Card(Rank.SIX, Suit.CLUBS),
-        Card(Rank.FIVE, Suit.CLUBS),
+        Card(9, C),
+        Card(8, C),
+        Card(7, C),
+        Card(6, C),
+        Card(5, C),
     },
     {
         # Mid-range Straight (different suits)
-        Card(Rank.JACK, Suit.DIAMONDS),
-        Card(Rank.TEN, Suit.DIAMONDS),
-        Card(Rank.NINE, Suit.DIAMONDS),
-        Card(Rank.EIGHT, Suit.DIAMONDS),
-        Card(Rank.SEVEN, Suit.DIAMONDS),
+        Card(J, D),
+        Card(10, D),
+        Card(9, D),
+        Card(8, D),
+        Card(7, D),
     },
     {
         # Lower Mid-range Straight
-        Card(Rank.SIX, Suit.SPADES),
-        Card(Rank.FIVE, Suit.SPADES),
-        Card(Rank.FOUR, Suit.SPADES),
-        Card(Rank.THREE, Suit.SPADES),
-        Card(Rank.TWO, Suit.SPADES),
+        Card(6, S),
+        Card(5, S),
+        Card(4, S),
+        Card(3, S),
+        Card(2, S),
     }
 ]
 
 _NON_STRAIGHT_FLUSHES = [
     {
         # Broken Straight (Gap at the Seven)
-        Card(Rank.NINE, Suit.HEARTS),
-        Card(Rank.EIGHT, Suit.HEARTS),
-        Card(Rank.SIX, Suit.HEARTS),
-        Card(Rank.FIVE, Suit.HEARTS),
-        Card(Rank.FOUR, Suit.HEARTS),
+        Card(9, H),
+        Card(8, H),
+        Card(6, H),
+        Card(5, H),
+        Card(4, H),
     },
     {
         # Wrap-around (King-Ace-Two is not a straight)
-        Card(Rank.KING, Suit.DIAMONDS),
-        Card(Rank.ACE, Suit.DIAMONDS),
-        Card(Rank.TWO, Suit.SPADES),
-        Card(Rank.THREE, Suit.SPADES),
-        Card(Rank.FOUR, Suit.SPADES),
+        Card(K, D),
+        Card(A, D),
+        Card(2, S),
+        Card(3, S),
+        Card(4, S),
     },
     {
         # Mid-range Straight
-        Card(Rank.NINE, Suit.CLUBS),
-        Card(Rank.EIGHT, Suit.CLUBS),
-        Card(Rank.SEVEN, Suit.CLUBS),
-        Card(Rank.SIX, Suit.CLUBS),
-        Card(Rank.FIVE, Suit.HEARTS),
+        Card(9, C),
+        Card(8, C),
+        Card(7, C),
+        Card(6, C),
+        Card(5, H),
     },
     {
         # High Card / All distinct but far apart
-        Card(Rank.ACE, Suit.DIAMONDS),
-        Card(Rank.JACK, Suit.DIAMONDS),
-        Card(Rank.EIGHT, Suit.DIAMONDS),
-        Card(Rank.FIVE, Suit.DIAMONDS),
-        Card(Rank.TWO, Suit.DIAMONDS),
+        Card(A, D),
+        Card(J, D),
+        Card(8, D),
+        Card(5, D),
+        Card(2, D),
     },
     {
         # Pair (Contains duplicate ranks, cannot be a straight)
-        Card(Rank.TEN, Suit.CLUBS),
-        Card(Rank.TEN, Suit.CLUBS),
-        Card(Rank.NINE, Suit.CLUBS),
-        Card(Rank.EIGHT, Suit.CLUBS),
-        Card(Rank.SEVEN, Suit.CLUBS),
+        Card(10, C),
+        Card(10, C),
+        Card(9, C),
+        Card(8, C),
+        Card(7, C),
     },
     {
         # Near Broadway (Missing the Jack)
-        Card(Rank.ACE, Suit.DIAMONDS),
-        Card(Rank.KING, Suit.DIAMONDS),
-        Card(Rank.QUEEN, Suit.DIAMONDS),
-        Card(Rank.TEN, Suit.DIAMONDS),
-        Card(Rank.NINE, Suit.DIAMONDS),
+        Card(A, D),
+        Card(K, D),
+        Card(Q, D),
+        Card(10, D),
+        Card(9, D),
     }
 ]
 
@@ -887,86 +887,86 @@ _NON_STRAIGHT_FLUSHES = [
 _ROYAL_FLUSHES = [
     # Hearts
     {
-        Card(Rank.ACE, Suit.HEARTS),
-        Card(Rank.KING, Suit.HEARTS),
-        Card(Rank.QUEEN, Suit.HEARTS),
-        Card(Rank.JACK, Suit.HEARTS),
-        Card(Rank.TEN, Suit.HEARTS),
+        Card(A, H),
+        Card(K, H),
+        Card(Q, H),
+        Card(J, H),
+        Card(10, H),
     },
     # Spades
     {
-        Card(Rank.ACE, Suit.SPADES),
-        Card(Rank.KING, Suit.SPADES),
-        Card(Rank.QUEEN, Suit.SPADES),
-        Card(Rank.JACK, Suit.SPADES),
-        Card(Rank.TEN, Suit.SPADES),
+        Card(A, S),
+        Card(K, S),
+        Card(Q, S),
+        Card(J, S),
+        Card(10, S),
     },
     # Diamonds
     {
-        Card(Rank.ACE, Suit.DIAMONDS),
-        Card(Rank.KING, Suit.DIAMONDS),
-        Card(Rank.QUEEN, Suit.DIAMONDS),
-        Card(Rank.JACK, Suit.DIAMONDS),
-        Card(Rank.TEN, Suit.DIAMONDS),
+        Card(A, D),
+        Card(K, D),
+        Card(Q, D),
+        Card(J, D),
+        Card(10, D),
     },
     # Clubs
     {
-        Card(Rank.ACE, Suit.CLUBS),
-        Card(Rank.KING, Suit.CLUBS),
-        Card(Rank.QUEEN, Suit.CLUBS),
-        Card(Rank.JACK, Suit.CLUBS),
-        Card(Rank.TEN, Suit.CLUBS),
+        Card(A, C),
+        Card(K, C),
+        Card(Q, C),
+        Card(J, C),
+        Card(10, C),
     },
 ]
 
 _NON_ROYAL_FLUSHES = [
     # Off-suit Broadway (straight, not flush)
     {
-        Card(Rank.ACE, Suit.HEARTS),
-        Card(Rank.KING, Suit.HEARTS),
-        Card(Rank.QUEEN, Suit.HEARTS),
-        Card(Rank.JACK, Suit.HEARTS),
-        Card(Rank.TEN, Suit.CLUBS),
+        Card(A, H),
+        Card(K, H),
+        Card(Q, H),
+        Card(J, H),
+        Card(10, C),
     },
     # Suited but not Broadway — straight flush, not royal
     {
-        Card(Rank.KING, Suit.HEARTS),
-        Card(Rank.QUEEN, Suit.HEARTS),
-        Card(Rank.JACK, Suit.HEARTS),
-        Card(Rank.TEN, Suit.HEARTS),
-        Card(Rank.NINE, Suit.HEARTS),
+        Card(K, H),
+        Card(Q, H),
+        Card(J, H),
+        Card(10, H),
+        Card(9, H),
     },
     # Flush but wrong ranks (no ten, no broadway)
     {
-        Card(Rank.ACE, Suit.HEARTS),
-        Card(Rank.KING, Suit.HEARTS),
-        Card(Rank.QUEEN, Suit.HEARTS),
-        Card(Rank.JACK, Suit.HEARTS),
-        Card(Rank.NINE, Suit.HEARTS),
+        Card(A, H),
+        Card(K, H),
+        Card(Q, H),
+        Card(J, H),
+        Card(9, H),
     },
     # Broadway ranks, suited, but ace is wrong suit (one card off)
     {
-        Card(Rank.ACE, Suit.CLUBS),
-        Card(Rank.KING, Suit.HEARTS),
-        Card(Rank.QUEEN, Suit.HEARTS),
-        Card(Rank.JACK, Suit.HEARTS),
-        Card(Rank.TEN, Suit.HEARTS),
+        Card(A, C),
+        Card(K, H),
+        Card(Q, H),
+        Card(J, H),
+        Card(10, H),
     },
     # Full house — two distinct rank groups, superficially "special"
     {
-        Card(Rank.ACE, Suit.HEARTS),
-        Card(Rank.ACE, Suit.DIAMONDS),
-        Card(Rank.ACE, Suit.CLUBS),
-        Card(Rank.KING, Suit.HEARTS),
-        Card(Rank.KING, Suit.DIAMONDS),
+        Card(A, H),
+        Card(A, D),
+        Card(A, C),
+        Card(K, H),
+        Card(K, D),
     },
     # Low straight flush (wheel straight flush — suited A2345)
     {
-        Card(Rank.ACE, Suit.SPADES),
-        Card(Rank.TWO, Suit.SPADES),
-        Card(Rank.THREE, Suit.SPADES),
-        Card(Rank.FOUR, Suit.SPADES),
-        Card(Rank.FIVE, Suit.SPADES),
+        Card(A, S),
+        Card(2, S),
+        Card(3, S),
+        Card(4, S),
+        Card(5, S),
     },
 ]
 
