@@ -170,11 +170,9 @@ def straight(hand: set[Card]) -> bool:
 
     ranks = {card.rank for card in hand}
 
-    num_cards = len(ranks)
-
-    return (num_cards >= _FULL_HAND and
-            ((max(ranks) - min(ranks) == num_cards - 1)
-             or ranks == _BROADWAY))
+    return (len(ranks) == _FULL_HAND and (
+            (max(ranks) - min(ranks) == _FULL_HAND - 1)
+            or ranks == _BROADWAY))
 
 
 def flush(hand: set[Card]) -> bool:
@@ -187,7 +185,7 @@ def flush(hand: set[Card]) -> bool:
     :return: True if at least 5 cards are suited
     """
 
-    if len(hand) < 5:
+    if len(hand) < _FULL_HAND:
         return False
 
     return len({card.suit for card in hand}) == 1
