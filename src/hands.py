@@ -93,9 +93,11 @@ def pair(hand: set[Card]) -> bool:
 
     # A SINGLE rank is counted twice
 
-    return 2 in Counter(
+    counts = Counter(
         card.rank for card in hand
-    ).values() and not two_pair(hand)
+    ).values()
+
+    return len([c for c in counts if c == 2]) == 1
 
 
 def two_pair(hand: set[Card]) -> bool:
